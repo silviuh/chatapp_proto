@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package chat;
+option go_package = "/gen";
+
+// The chat service definition.
+service ChatService {
+  // Sends a message to a chat room
+  rpc SendMessage (SendMessageRequest) returns (SendMessageResponse) {}
+}
+
+// The request message containing the user's name and the message.
+message SendMessageRequest {
+  string user = 1;
+  string message = 2;
+}
+
+// The response message containing the send status.
+message SendMessageResponse {
+  bool success = 1;
+}
