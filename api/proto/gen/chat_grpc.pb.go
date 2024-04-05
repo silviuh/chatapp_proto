@@ -19,7 +19,10 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	ChatService_SendMessage_FullMethodName = "/chat.ChatService/SendMessage"
+	ChatService_SendMessage_FullMethodName      = "/chat.ChatService/SendMessage"
+	ChatService_RegisterUser_FullMethodName     = "/chat.ChatService/RegisterUser"
+	ChatService_AuthenticateUser_FullMethodName = "/chat.ChatService/AuthenticateUser"
+	ChatService_GetUserDetails_FullMethodName   = "/chat.ChatService/GetUserDetails"
 )
 
 // ChatServiceClient is the client API for ChatService service.
@@ -28,6 +31,11 @@ const (
 type ChatServiceClient interface {
 	// Sends a message to a chat room
 	SendMessage(ctx context.Context, in *SendMessageRequest, opts ...grpc.CallOption) (*SendMessageResponse, error)
+	// User registration
+	RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error)
+	// User authentication
+	AuthenticateUser(ctx context.Context, in *AuthenticateUserRequest, opts ...grpc.CallOption) (*AuthenticateUserResponse, error)
+	GetUserDetails(ctx context.Context, in *GetUserDetailsRequest, opts ...grpc.CallOption) (*GetUserDetailsResponse, error)
 }
 
 type chatServiceClient struct {
@@ -47,12 +55,44 @@ func (c *chatServiceClient) SendMessage(ctx context.Context, in *SendMessageRequ
 	return out, nil
 }
 
+func (c *chatServiceClient) RegisterUser(ctx context.Context, in *RegisterUserRequest, opts ...grpc.CallOption) (*RegisterUserResponse, error) {
+	out := new(RegisterUserResponse)
+	err := c.cc.Invoke(ctx, ChatService_RegisterUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *chatServiceClient) AuthenticateUser(ctx context.Context, in *AuthenticateUserRequest, opts ...grpc.CallOption) (*AuthenticateUserResponse, error) {
+	out := new(AuthenticateUserResponse)
+	err := c.cc.Invoke(ctx, ChatService_AuthenticateUser_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *chatServiceClient) GetUserDetails(ctx context.Context, in *GetUserDetailsRequest, opts ...grpc.CallOption) (*GetUserDetailsResponse, error) {
+	out := new(GetUserDetailsResponse)
+	err := c.cc.Invoke(ctx, ChatService_GetUserDetails_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // ChatServiceServer is the server API for ChatService service.
 // All implementations must embed UnimplementedChatServiceServer
 // for forward compatibility
 type ChatServiceServer interface {
 	// Sends a message to a chat room
 	SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error)
+	// User registration
+	RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error)
+	// User authentication
+	AuthenticateUser(context.Context, *AuthenticateUserRequest) (*AuthenticateUserResponse, error)
+	GetUserDetails(context.Context, *GetUserDetailsRequest) (*GetUserDetailsResponse, error)
 	mustEmbedUnimplementedChatServiceServer()
 }
 
@@ -62,6 +102,15 @@ type UnimplementedChatServiceServer struct {
 
 func (UnimplementedChatServiceServer) SendMessage(context.Context, *SendMessageRequest) (*SendMessageResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method SendMessage not implemented")
+}
+func (UnimplementedChatServiceServer) RegisterUser(context.Context, *RegisterUserRequest) (*RegisterUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method RegisterUser not implemented")
+}
+func (UnimplementedChatServiceServer) AuthenticateUser(context.Context, *AuthenticateUserRequest) (*AuthenticateUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AuthenticateUser not implemented")
+}
+func (UnimplementedChatServiceServer) GetUserDetails(context.Context, *GetUserDetailsRequest) (*GetUserDetailsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetUserDetails not implemented")
 }
 func (UnimplementedChatServiceServer) mustEmbedUnimplementedChatServiceServer() {}
 
@@ -94,6 +143,60 @@ func _ChatService_SendMessage_Handler(srv interface{}, ctx context.Context, dec 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _ChatService_RegisterUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(RegisterUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).RegisterUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChatService_RegisterUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).RegisterUser(ctx, req.(*RegisterUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChatService_AuthenticateUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(AuthenticateUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).AuthenticateUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChatService_AuthenticateUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).AuthenticateUser(ctx, req.(*AuthenticateUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _ChatService_GetUserDetails_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetUserDetailsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ChatServiceServer).GetUserDetails(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: ChatService_GetUserDetails_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ChatServiceServer).GetUserDetails(ctx, req.(*GetUserDetailsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // ChatService_ServiceDesc is the grpc.ServiceDesc for ChatService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -104,6 +207,18 @@ var ChatService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "SendMessage",
 			Handler:    _ChatService_SendMessage_Handler,
+		},
+		{
+			MethodName: "RegisterUser",
+			Handler:    _ChatService_RegisterUser_Handler,
+		},
+		{
+			MethodName: "AuthenticateUser",
+			Handler:    _ChatService_AuthenticateUser_Handler,
+		},
+		{
+			MethodName: "GetUserDetails",
+			Handler:    _ChatService_GetUserDetails_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

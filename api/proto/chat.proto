@@ -7,7 +7,43 @@ option go_package = "/gen";
 service ChatService {
   // Sends a message to a chat room
   rpc SendMessage (SendMessageRequest) returns (SendMessageResponse) {}
+
+  // User registration
+  rpc RegisterUser (RegisterUserRequest) returns (RegisterUserResponse) {}
+
+  // User authentication
+  rpc AuthenticateUser (AuthenticateUserRequest) returns (AuthenticateUserResponse) {}
+
+  rpc GetUserDetails (GetUserDetailsRequest) returns (GetUserDetailsResponse) {}
+
+
+  // Add more services as needed, e.g., for managing chat rooms
 }
+
+// Existing SendMessageRequest and SendMessageResponse definitions...
+
+// Definition for registering a new user
+message RegisterUserRequest {
+  string username = 1;
+  string email = 2;
+  string password = 3;
+}
+
+message RegisterUserResponse {
+  bool success = 1;
+}
+
+// Definition for user authentication
+message AuthenticateUserRequest {
+  string username = 1;
+  string password = 2;
+}
+
+message AuthenticateUserResponse {
+  bool success = 1;
+}
+
+// Optionally, definitions for managing chat rooms...
 
 // The request message containing the user's name and the message.
 message SendMessageRequest {
@@ -18,4 +54,12 @@ message SendMessageRequest {
 // The response message containing the send status.
 message SendMessageResponse {
   bool success = 1;
+}
+
+message GetUserDetailsRequest {
+  string email = 1;
+}
+
+message GetUserDetailsResponse {
+  bool isOnline = 1;
 }
