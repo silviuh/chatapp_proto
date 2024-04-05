@@ -17,6 +17,8 @@ func main() {
 	dbName := "chatapp"                     // Your database name
 	db.ConnectMongo(mongoURI, dbName)
 
+	db.InitializeRedis("localhost:6379")
+
 	// Verify the connection (Optional, as ConnectMongo already pings the database)
 	if err := db.MI.Client.Ping(context.Background(), nil); err != nil {
 		log.Fatalf("Failed to connect to MongoDB: %v", err)
