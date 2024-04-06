@@ -16,13 +16,9 @@ service ChatService {
 
   rpc GetUserDetails (GetUserDetailsRequest) returns (GetUserDetailsResponse) {}
 
-
-  // Add more services as needed, e.g., for managing chat rooms
+  rpc LogoutUser (LogoutUserRequest) returns (LogoutUserResponse) {}
 }
 
-// Existing SendMessageRequest and SendMessageResponse definitions...
-
-// Definition for registering a new user
 message RegisterUserRequest {
   string username = 1;
   string email = 2;
@@ -43,15 +39,12 @@ message AuthenticateUserResponse {
   bool success = 1;
 }
 
-// Optionally, definitions for managing chat rooms...
 
-// The request message containing the user's name and the message.
 message SendMessageRequest {
   string user = 1;
   string message = 2;
 }
 
-// The response message containing the send status.
 message SendMessageResponse {
   bool success = 1;
 }
@@ -62,4 +55,12 @@ message GetUserDetailsRequest {
 
 message GetUserDetailsResponse {
   bool isOnline = 1;
+}
+
+message LogoutUserRequest {
+  string email = 1;
+}
+
+message LogoutUserResponse {
+  bool success = 1;
 }

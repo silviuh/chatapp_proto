@@ -57,6 +57,31 @@ func (s *Server) AuthenticateUser(ctx context.Context, in *pb.AuthenticateUserRe
 	}
 }
 
-func (s *Server) GetUserDetails(userEmail string) (bool, error) {
-	return db.IsUserOnline(userEmail), nil
+func (s *Server) GetUserDetails(ctx context.Context, req *pb.GetUserDetailsRequest) (*pb.GetUserDetailsResponse, error) {
+	// Extract the email from the request
+	userEmail := req.GetEmail()
+
+	// Check if the user is online
+	isOnline := db.IsUserOnline(userEmail)
+
+	// Create a response
+	res := &pb.GetUserDetailsResponse{
+		IsOnline: isOnline,
+	}
+
+	// Return the response and nil error
+	return res, nil
+}
+
+func (s *Server) LogoutUser(ctx context.Context, in *pb.LogoutUserRequest) (*pb.LogoutUserResponse, error) {
+	// Example action: mark the user as offline in Redis
+	err := db.MarkUserOffline(in.GetEmail())
+	if err != nil {
+		log.Printf("Error marking user as offline: %v", err)
+		return &pb.LogoutUserResponse{Success: false}, nil
+	}
+
+	// Here, you could also handle other logout logic, such as invalidating tokens.
+
+	return &pb.LogoutUserResponse{Success: true}, nil
 }

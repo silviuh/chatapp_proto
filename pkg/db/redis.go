@@ -34,6 +34,12 @@ func MarkUserOnline(userEmail string) {
 	}
 }
 
+func MarkUserOffline(userEmail string) error {
+	ctx := context.Background()
+	_, err := RDB.Del(ctx, "user_online:"+userEmail).Result()
+	return err
+}
+
 // IsUserOnline checks if a user is marked as online in Redis by their email.
 func IsUserOnline(userEmail string) bool {
 	ctx := context.Background()
